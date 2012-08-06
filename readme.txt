@@ -3,3 +3,5 @@ Lesson #2.
 The main purpose of this lesson is to create a simple game loop, and create an ascii game.
 
 - Check in #1. We create a shell by create a new c# console app.
+
+- Check in #2. Create a game loop. Take in user input and draw the player "O".
