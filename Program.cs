@@ -23,11 +23,19 @@ namespace Lesson2
         static int s_PlayerDeathTime = 0;
 
         // Screen coord. Here we are going to want to store the position of the bullet.
-        static int s_bulletXPos = 40;
-        static int s_bulletYPos = 3;
+        // we want this to be an array of 5. So we can have different bullets running at the same time.
+        static int[] s_bulletXPos = new int[5];
+        static int[] s_bulletYPos = new int[5];
 
         static void Main(string[] args)
         {
+            // we now need to initialize all the bullets
+            for (int i = 0; i < 5; ++i)
+            {
+                s_bulletXPos[i] = s_RandomNumberGenerator.Next(40);
+                s_bulletYPos[i] = s_RandomNumberGenerator.Next(20);
+            }
+
             // this is the game loop... every frame until the game exits
             while (!s_ExitGame)
             {
@@ -91,28 +99,32 @@ namespace Lesson2
                 }
             }
 
-            // now we are going to update the bullets movement
-            s_bulletXPos -= 1;
-
-            // if the bullet hits the end we want it to wrap around
-            if (s_bulletXPos < 0)
+            // instead of update the 1 bullet we update each of the 5
+            for (int i=0; i<5; ++i)
             {
-                s_bulletXPos = 40;
-                s_bulletYPos = s_RandomNumberGenerator.Next(20);
-            }
+                // now we are going to update the bullets movement
+                s_bulletXPos[i] -= 1;
 
-            // now we can check if the bullet hit the player
-            if (s_bulletXPos == s_PlayerXPos
-                && s_bulletYPos == s_PlayerYPos)
-            { 
-                // there is a hit if they occupy the same space!
-                // we will handle this in the next exercise.
+                // if the bullet hits the end we want it to wrap around
+                if (s_bulletXPos[i] < 0)
+                {
+                    s_bulletXPos[i] = 40;
+                    s_bulletYPos[i] = s_RandomNumberGenerator.Next(20);
+                }
 
-                s_PlayerDeathTime = 20;
+                // now we can check if the bullet hit the player
+                if (s_bulletXPos[i] == s_PlayerXPos
+                    && s_bulletYPos[i] == s_PlayerYPos)
+                { 
+                    // there is a hit if they occupy the same space!
+                    // we will handle this in the next exercise.
 
-                // move the bullet back
-                s_bulletXPos = 40;
-                s_bulletYPos = s_RandomNumberGenerator.Next(20);
+                    s_PlayerDeathTime = 20;
+
+                    // move the bullet back
+                    s_bulletXPos[i] = 40;
+                    s_bulletYPos[i] = s_RandomNumberGenerator.Next(20);
+                }
             }
         }
 
@@ -136,9 +148,13 @@ namespace Lesson2
                 Console.Write("O"); // O if he is alive
             }
 
-            // now we need to draw the bullet
-            Console.SetCursorPosition(s_bulletXPos, s_bulletYPos);
-            Console.Write(".");
+            // instead of drawing the 1 bullet we update each of the 5
+            for (int i = 0; i < 5; ++i)
+            {
+                // now we need to draw the bullet
+                Console.SetCursorPosition(s_bulletXPos[i], s_bulletYPos[i]);
+                Console.Write(".");
+            }
         }
     }
 }
